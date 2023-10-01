@@ -37,4 +37,13 @@ public class Post {
         this.description = dto.getDescription();
         this.skill = dto.getSkill();
     }
+
+    public Post update(PostDto.Update dto) {
+        this.position = dto.getPosition();
+        this.reward = dto.getReward();
+        this.description = dto.getDescription();
+        this.skill = dto.getSkill();
+
+        return this;
+    }
 }

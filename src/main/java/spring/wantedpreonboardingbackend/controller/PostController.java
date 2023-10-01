@@ -25,7 +25,15 @@ public class PostController {
     public ResponseEntity<ResponseDto<?>> createPost(@RequestBody PostDto.Req postDto) {
         PostDto.Res dto = postService.createPost(postDto);
 
-        return ResponseDto.toResponseEntity(StatusCode.POST_SUCCESS, dto);
+        return ResponseDto.toResponseEntity(StatusCode.CREATE_POST_SUCCESS, dto);
+    }
+
+    @Operation(summary = "채용 공고 수정")
+    @PutMapping("/hiring/{postId}")
+    public ResponseEntity<ResponseDto<?>> updatePost(@PathVariable Long postId, @RequestBody PostDto.Update updateDto) {
+        PostDto.Res dto = postService.updatePost(postId, updateDto);
+
+        return ResponseDto.toResponseEntity(StatusCode.UPDATE_POST_SUCCESS, dto);
     }
 
     @Operation(summary = "공고 목록 조회")

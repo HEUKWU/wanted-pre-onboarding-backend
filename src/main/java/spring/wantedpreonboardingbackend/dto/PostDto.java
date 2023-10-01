@@ -31,6 +31,22 @@ public class PostDto {
 
     @Getter
     @NoArgsConstructor
+    public static class Update {
+        private String position;
+        private int reward;
+        private String description;
+        private String skill;
+
+        public Update(String position, int reward, String description, String skill) {
+            this.position = position;
+            this.reward = reward;
+            this.description = description;
+            this.skill = skill;
+        }
+    }
+
+    @Getter
+    @NoArgsConstructor
     public static class Res {
         private Long companyId;
         private String position;
@@ -47,9 +63,9 @@ public class PostDto {
             this.skill = skill;
         }
 
-        public static Res of(Long companyId, Post post) {
+        public static Res of(Post post) {
             return Res.builder()
-                    .companyId(companyId)
+                    .companyId(post.getCompany().getId())
                     .position(post.getPosition())
                     .reward(post.getReward())
                     .description(post.getPosition())
