@@ -1,10 +1,15 @@
 package spring.wantedpreonboardingbackend.entity;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import spring.wantedpreonboardingbackend.dto.PostDto;
 
 import java.util.List;
 
 @Entity
+@Getter
+@NoArgsConstructor
 public class Post {
 
     @Id
@@ -21,29 +26,15 @@ public class Post {
 
     private int reward;
 
+    private String description;
+
     private String skill;
 
-    public Long getId() {
-        return id;
-    }
-
-    public Company getCompany() {
-        return company;
-    }
-
-    public List<Apply> getApplyList() {
-        return applyList;
-    }
-
-    public String getPosition() {
-        return position;
-    }
-
-    public int getReward() {
-        return reward;
-    }
-
-    public String getSkill() {
-        return skill;
+    public Post(Company company, PostDto.Req dto) {
+        this.company = company;
+        this.position = dto.getPosition();
+        this.reward = dto.getReward();
+        this.description = dto.getDescription();
+        this.skill = dto.getSkill();
     }
 }

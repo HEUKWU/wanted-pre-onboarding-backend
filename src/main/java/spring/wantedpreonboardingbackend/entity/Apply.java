@@ -1,6 +1,6 @@
 package spring.wantedpreonboardingbackend.entity;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 
 @Entity
 public class Apply {
