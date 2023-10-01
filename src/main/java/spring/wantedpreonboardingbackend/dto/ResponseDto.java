@@ -18,13 +18,13 @@ public class ResponseDto<T> {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private T data;
 
-    public static ResponseEntity<ResponseDto<?>> toResponseEntity(StatusCode code, PostDto.Res dto) {
+    public static ResponseEntity<ResponseDto<?>> toResponseEntity(StatusCode code, Object data) {
         return ResponseEntity
                 .status(code.getStatusCode())
                 .body(ResponseDto.builder()
                         .code(code.getStatusCode())
                         .message(code.getMessage())
-                        .data(dto)
+                        .data(data)
                         .build()
                 );
     }

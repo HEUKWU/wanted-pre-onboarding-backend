@@ -16,4 +16,10 @@ public class GlobalExceptionHandler {
     protected ResponseEntity<ResponseDto<?>> notFoundCompanyException(NotFoundCompanyException e) {
         return ResponseDto.toResponseEntity(StatusCode.NOT_FOUND_COMPANY, null);
     }
+
+    @ExceptionHandler(value = NotFoundPostException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    protected ResponseEntity<ResponseDto<?>> notFoundCompanyException(NotFoundPostException e) {
+        return ResponseDto.toResponseEntity(StatusCode.NOT_FOUND_POST, null);
+    }
 }

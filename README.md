@@ -21,3 +21,5 @@
 | 채용 지원       |POST| /applying| {<br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "post_id" : 1, <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"user_id" : 1<br> } |{<br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "user_id"  : 1,<br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "company_id" : 1, <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"position" : "백엔드 주니어 개발자", <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"reward" : 1000000, <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"description" : "원티드랩에서 백...", <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"skill" : "Python"<br> } |
 </details>
 
+## 과제 수행
+채용 공고 등록 - 2023/10/01
