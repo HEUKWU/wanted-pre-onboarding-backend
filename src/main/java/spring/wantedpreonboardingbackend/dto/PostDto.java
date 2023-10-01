@@ -1,10 +1,13 @@
 package spring.wantedpreonboardingbackend.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import spring.wantedpreonboardingbackend.entity.Company;
 import spring.wantedpreonboardingbackend.entity.Post;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class PostDto {
 
@@ -57,7 +60,7 @@ public class PostDto {
 
     @Getter
     @NoArgsConstructor
-    public static class PostList {
+    public static class GetPost {
         private Long postId;
         private String companyName;
         private String country;
@@ -65,9 +68,13 @@ public class PostDto {
         private String position;
         private int reward;
         private String skill;
+        @JsonInclude(JsonInclude.Include.NON_NULL)
+        private String description;
+        @JsonInclude(JsonInclude.Include.NON_NULL)
+        private List<Long> otherPosts;
 
         @Builder
-        public PostList(Long postId, String companyName, String country, String location, String position, int reward, String skill) {
+        public GetPost(Long postId, String companyName, String country, String location, String position, int reward, String skill, String description, List<Long> otherPosts) {
             this.postId = postId;
             this.companyName = companyName;
             this.country = country;
@@ -75,10 +82,12 @@ public class PostDto {
             this.position = position;
             this.reward = reward;
             this.skill = skill;
+            this.description = description;
+            this.otherPosts = otherPosts;
         }
 
-        public static PostList of(Post post) {
-            return PostList.builder()
+        public static GetPost getPostList(Post post) {
+            return GetPost.builder()
                     .postId(post.getId())
                     .companyName(post.getCompany().getCompanyName())
                     .country(post.getCompany().getCountry())
@@ -86,6 +95,29 @@ public class PostDto {
                     .position(post.getPosition())
                     .reward(post.getReward())
                     .skill(post.getSkill())
+                    .build();
+        }
+
+        public static GetPost getPost(Post post) {
+            List<Post> postList = post.getCompany().getPostList();
+            List<Long> otherPosts = new ArrayList<>();
+
+            for (Post p : postList) {
+                if (!p.getId().equals(post.getId())) {
+                    otherPosts.add(p.getId());
+                }
+            }
+
+            return GetPost.builder()
+                    .postId(post.getId())
+                    .companyName(post.getCompany().getCompanyName())
+                    .country(post.getCompany().getCountry())
+                    .location(post.getCompany().getLocation())
+                    .position(post.getPosition())
+                    .reward(post.getReward())
+                    .skill(post.getSkill())
+                    .description(post.getDescription())
+                    .otherPosts(otherPosts)
                     .build();
         }
     }

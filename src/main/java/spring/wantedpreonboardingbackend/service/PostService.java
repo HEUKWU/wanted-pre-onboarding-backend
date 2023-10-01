@@ -31,7 +31,7 @@ public class PostService {
         return PostDto.Res.of(company.getId(), post);
     }
 
-    public List<PostDto.PostList> getPostList(int page, int size) {
+    public List<PostDto.GetPost> getPostList(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Post> posts = postRepository.findAll(pageable);
 
@@ -39,12 +39,18 @@ public class PostService {
             throw new NotFoundPostException();
         }
 
-        List<PostDto.PostList> postList = new ArrayList<>();
+        List<PostDto.GetPost> getPost = new ArrayList<>();
 
         for (Post post : posts) {
-            postList.add(PostDto.PostList.of(post));
+            getPost.add(PostDto.GetPost.getPostList(post));
         }
 
-        return postList;
+        return getPost;
+    }
+
+    public PostDto.GetPost getPost(Long postId) {
+        Post post = postRepository.findById(postId).orElseThrow(NotFoundPostException::new);
+
+        return PostDto.GetPost.getPost(post);
     }
 }
