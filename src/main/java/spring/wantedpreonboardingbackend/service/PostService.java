@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import spring.wantedpreonboardingbackend.dto.PostDto;
 import spring.wantedpreonboardingbackend.entity.Company;
 import spring.wantedpreonboardingbackend.entity.Post;
+import spring.wantedpreonboardingbackend.entity.SearchOption;
 import spring.wantedpreonboardingbackend.exception.NotFoundCompanyException;
 import spring.wantedpreonboardingbackend.exception.NotFoundPostException;
 import spring.wantedpreonboardingbackend.repository.CompanyRepository;
@@ -44,10 +45,9 @@ public class PostService {
         postRepository.delete(post);
     }
 
-    public List<PostDto.GetPost> getPostList(int page, int size) {
+    public List<PostDto.GetPost> getPostList(SearchOption searchOption, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<Post> posts = postRepository.findAllByDeletedIsFalse(pageable);
-
+        Page<Post> posts = postRepository.findBySearchOption(pageable, searchOption);
 
         return getGetPosts(posts);
     }
