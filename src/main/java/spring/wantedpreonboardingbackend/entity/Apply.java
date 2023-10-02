@@ -1,8 +1,15 @@
 package spring.wantedpreonboardingbackend.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 
 @Entity
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Apply {
 
     @Id
@@ -25,5 +32,12 @@ public class Apply {
 
     public Post getPost() {
         return post;
+    }
+
+    public static Apply of(User user, Post post) {
+        return Apply.builder()
+                .user(user)
+                .post(post)
+                .build();
     }
 }

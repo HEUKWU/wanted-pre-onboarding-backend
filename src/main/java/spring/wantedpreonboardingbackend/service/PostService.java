@@ -1,8 +1,6 @@
 package spring.wantedpreonboardingbackend.service;
 
 import lombok.RequiredArgsConstructor;
-import org.hibernate.Filter;
-import org.hibernate.Session;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -16,7 +14,6 @@ import spring.wantedpreonboardingbackend.exception.NotFoundPostException;
 import spring.wantedpreonboardingbackend.repository.CompanyRepository;
 import spring.wantedpreonboardingbackend.repository.PostRepository;
 
-import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,26 +23,24 @@ public class PostService {
 
     private final PostRepository postRepository;
     private final CompanyRepository companyRepository;
-    private final EntityManager entityManager;
 
     public PostDto.Res createPost(PostDto.Req postDto) {
         Company company = companyRepository.findById(postDto.getCompanyId()).orElseThrow(NotFoundCompanyException::new);
-        Post post = new Post(company, postDto);
-        postRepository.save(post);
+        Post post = postRepository.save(Post.of(company, postDto));
 
         return PostDto.Res.of(post);
     }
 
     @Transactional
     public PostDto.Res updatePost(Long postId, PostDto.Update updateDto) {
-        Post post = postRepository.findById(postId).orElseThrow(NotFoundPostException::new);
+        Post post = postRepository.findByIdAndDeletedIsFalse(postId).orElseThrow(NotFoundPostException::new);
         Post updatePost = post.update(updateDto);
 
         return PostDto.Res.of(updatePost);
     }
 
     public void deletePost(Long postId) {
-        Post post = postRepository.findById(postId).orElseThrow(NotFoundPostException::new);
+        Post post = postRepository.findByIdAndDeletedIsFalse(postId).orElseThrow(NotFoundPostException::new);
         postRepository.delete(post);
     }
 

@@ -13,14 +13,14 @@ import spring.wantedpreonboardingbackend.service.PostService;
 
 import java.util.List;
 
-@Tag(name = "Post", description = "지원 공고")
+@Tag(name = "Post", description = "채용 공고")
 @Controller
 @RequiredArgsConstructor
 public class PostController {
 
     private final PostService postService;
 
-    @Operation(summary = "지원 공고 등록")
+    @Operation(summary = "채용 공고 등록")
     @PostMapping("/hiring/posting")
     public ResponseEntity<ResponseDto<?>> createPost(@RequestBody PostDto.Req postDto) {
         PostDto.Res dto = postService.createPost(postDto);
