@@ -1,6 +1,7 @@
 package spring.wantedpreonboardingbackend.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -46,6 +47,8 @@ public class PostDto {
     }
 
     @Getter
+    @Builder
+    @AllArgsConstructor
     @NoArgsConstructor
     public static class Res {
         private Long companyId;
@@ -53,15 +56,6 @@ public class PostDto {
         private int reward;
         private String description;
         private String skill;
-
-        @Builder
-        public Res(Long companyId, String position, int reward, String description, String skill) {
-            this.companyId = companyId;
-            this.position = position;
-            this.reward = reward;
-            this.description = description;
-            this.skill = skill;
-        }
 
         public static Res of(Post post) {
             return Res.builder()
@@ -75,6 +69,8 @@ public class PostDto {
     }
 
     @Getter
+    @Builder
+    @AllArgsConstructor
     @NoArgsConstructor
     public static class GetPost {
         private Long postId;
@@ -88,19 +84,6 @@ public class PostDto {
         private String description;
         @JsonInclude(JsonInclude.Include.NON_NULL)
         private List<Long> otherPosts;
-
-        @Builder
-        public GetPost(Long postId, String companyName, String country, String location, String position, int reward, String skill, String description, List<Long> otherPosts) {
-            this.postId = postId;
-            this.companyName = companyName;
-            this.country = country;
-            this.location = location;
-            this.position = position;
-            this.reward = reward;
-            this.skill = skill;
-            this.description = description;
-            this.otherPosts = otherPosts;
-        }
 
         public static GetPost getPostList(Post post) {
             return GetPost.builder()
