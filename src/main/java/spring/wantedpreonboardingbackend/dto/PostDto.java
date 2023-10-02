@@ -6,8 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import spring.wantedpreonboardingbackend.entity.Post;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class PostDto {
 
@@ -116,13 +116,6 @@ public class PostDto {
 
         public static GetPost getPost(Post post) {
             List<Post> postList = post.getCompany().getPostList();
-            List<Long> otherPosts = new ArrayList<>();
-
-            for (Post p : postList) {
-                if (!p.getId().equals(post.getId())) {
-                    otherPosts.add(p.getId());
-                }
-            }
 
             return GetPost.builder()
                     .postId(post.getId())
@@ -133,7 +126,10 @@ public class PostDto {
                     .reward(post.getReward())
                     .skill(post.getSkill())
                     .description(post.getDescription())
-                    .otherPosts(otherPosts)
+                    .otherPosts(postList.stream()
+                            .map(Post::getId)
+                            .filter(id -> !id.equals(post.getId()))
+                            .collect(Collectors.toList()))
                     .build();
         }
     }

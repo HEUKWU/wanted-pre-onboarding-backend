@@ -21,7 +21,7 @@ public class PostController {
     private final PostService postService;
 
     @Operation(summary = "지원 공고 등록")
-    @PostMapping("/hiring")
+    @PostMapping("/hiring/posting")
     public ResponseEntity<ResponseDto<?>> createPost(@RequestBody PostDto.Req postDto) {
         PostDto.Res dto = postService.createPost(postDto);
 
@@ -29,11 +29,19 @@ public class PostController {
     }
 
     @Operation(summary = "채용 공고 수정")
-    @PutMapping("/hiring/{postId}")
+    @PutMapping("/hiring/editing/{postId}")
     public ResponseEntity<ResponseDto<?>> updatePost(@PathVariable Long postId, @RequestBody PostDto.Update updateDto) {
         PostDto.Res dto = postService.updatePost(postId, updateDto);
 
         return ResponseDto.toResponseEntity(StatusCode.UPDATE_POST_SUCCESS, dto);
+    }
+
+    @Operation(summary = "채용 공고 삭제")
+    @DeleteMapping("/hiring/deleting/{postId}")
+    public ResponseEntity<ResponseDto<?>> deletePost(@PathVariable Long postId) {
+        postService.deletePost(postId);
+
+        return ResponseDto.toResponseEntity(StatusCode.DELETE_POST_SUCCESS, null);
     }
 
     @Operation(summary = "공고 목록 조회")
@@ -45,7 +53,7 @@ public class PostController {
     }
 
     @Operation(summary = "공고 상세 조회")
-    @GetMapping("/hiring/{postId}")
+    @GetMapping("/hiring/details/{postId}")
     public ResponseEntity<ResponseDto<?>> getPost(@PathVariable Long postId) {
         PostDto.GetPost getPost = postService.getPost(postId);
 

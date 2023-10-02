@@ -1,8 +1,11 @@
 package spring.wantedpreonboardingbackend.entity;
 
 import javax.persistence.*;
+import javax.persistence.Entity;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.*;
 import spring.wantedpreonboardingbackend.dto.PostDto;
 
 import java.util.List;
@@ -10,6 +13,7 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor
+@SQLDelete(sql = "UPDATE post SET deleted = true WHERE id = ?")
 public class Post {
 
     @Id
@@ -29,6 +33,8 @@ public class Post {
     private String description;
 
     private String skill;
+
+    private boolean deleted = Boolean.FALSE;
 
     public Post(Company company, PostDto.Req dto) {
         this.company = company;

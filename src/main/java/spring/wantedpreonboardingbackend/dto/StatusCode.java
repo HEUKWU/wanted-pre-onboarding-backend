@@ -9,6 +9,7 @@ public enum StatusCode {
     CREATE_POST_SUCCESS(HttpStatus.CREATED.value(), "채용 공고가 등록되었습니다."),
     GET_POST_SUCCESS(HttpStatus.OK.value(), "채용 공고 조회가 완료되었습니다."),
     UPDATE_POST_SUCCESS(HttpStatus.OK.value(), "채용 공고가 수정되었습니다."),
+    DELETE_POST_SUCCESS(HttpStatus.OK.value(), "채용 공고가 삭제되었습니다."),
 
     //fail
     NOT_FOUND_COMPANY(HttpStatus.NOT_FOUND.value(), "회사를 찾을 수 없습니다."),

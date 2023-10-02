@@ -1,6 +1,8 @@
 package spring.wantedpreonboardingbackend.service;
 
 import lombok.RequiredArgsConstructor;
+import org.hibernate.Filter;
+import org.hibernate.Session;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -14,6 +16,7 @@ import spring.wantedpreonboardingbackend.exception.NotFoundPostException;
 import spring.wantedpreonboardingbackend.repository.CompanyRepository;
 import spring.wantedpreonboardingbackend.repository.PostRepository;
 
+import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +26,7 @@ public class PostService {
 
     private final PostRepository postRepository;
     private final CompanyRepository companyRepository;
+    private final EntityManager entityManager;
 
     public PostDto.Res createPost(PostDto.Req postDto) {
         Company company = companyRepository.findById(postDto.getCompanyId()).orElseThrow(NotFoundCompanyException::new);
@@ -40,26 +44,26 @@ public class PostService {
         return PostDto.Res.of(updatePost);
     }
 
-    @Transactional(readOnly = true)
+    public void deletePost(Long postId) {
+        Post post = postRepository.findById(postId).orElseThrow(NotFoundPostException::new);
+        postRepository.delete(post);
+    }
+
     public List<PostDto.GetPost> getPostList(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<Post> posts = postRepository.findAll(pageable);
+        Page<Post> posts = postRepository.findAllByDeletedIsFalse(pageable);
+
 
         return getGetPosts(posts);
     }
 
-    @Transactional(readOnly = true)
     public PostDto.GetPost getPost(Long postId) {
-        Post post = postRepository.findById(postId).orElseThrow(NotFoundPostException::new);
+        Post post = postRepository.findByIdAndDeletedIsFalse(postId).orElseThrow(NotFoundPostException::new);
 
         return PostDto.GetPost.getPost(post);
     }
 
-    private static List<PostDto.GetPost> getGetPosts(Page<Post> posts) {
-        if (posts.isEmpty()) {
-            throw new NotFoundPostException();
-        }
-
+    private List<PostDto.GetPost> getGetPosts(Page<Post> posts) {
         List<PostDto.GetPost> getPost = new ArrayList<>();
 
         for (Post post : posts) {
