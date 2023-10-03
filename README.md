@@ -1,25 +1,29 @@
 # 프리온보딩 벡엔드 인턴십 선발과제
 
-## 요구사항
-* 채용 공고 등록
-* 채용 공고 수정
-* 채용 공고 삭제
-* 채용 공고 조회
-* 채용 상세 페이지 조회
-* 채용 지원
-
+---
+## 주요 기능
+### 1. 채용 공고를 등록
+### 2. 채용 공고를 수정
+### 3. 채용 공고를 삭제
+* 삭제된 데이터를 추후에 사용할 가능성에 대비해 soft delete 적용
+### 4. 채용 공고를 조회할 수 있다.
+* 데이터량의 증가에 따른 DB 부하에 대비해 페이징처리
+* Querydsl을 사용해 사용자는 회사명, 나라, 위치, 채용 포지션, 사용기술을 기반으로 채용 공고를 검색할 수 있다.
+### 5. 채용 상세 페이지 조회
+* 상세 조회시 해당 공고의 회사가 올린 다른 채용 공고(채용 공고의 id)를 볼 수 있다.
+### 6. 채용 지원
+* 사용자는 하나의 채용 공고에 1회만 지원할 수 있다.
+---
+## API 명세
 <details>
-<summary>API 명세서</summary>
-
-| function    | method | url      | request                                                                                                                                                                                                                                                                                                                            | response|  
-|-------------|--------|----------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---|
-| 채용 공고 등록    | POST   | /hiring  | {<br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "company_id" : 1, <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"position" : "백엔드 주니어 개발자", <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"reward" : 1000000, <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"description" : "원티드랩에서 백...", <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"skill" : "Python"<br> } | {<br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "code" : 200, <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"message" : "success", <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"result" : "{<br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "company_id" : 1, <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"position" : "백엔드 주니어 개발자", <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"reward" : 1000000, <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"description" : "원티드랩에서 백...", <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"skill" : "Python"<br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}" <br> }|
-| 채용 공고 수정    | PUT    | /hiring/{postId} | {<br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"position" : "백엔드 주니어 개발자", <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"reward" : 1500000, <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"description" : "원티드랩에서 백...", <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"skill" : "Python"<br> }                                                       | {<br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "code" : 200, <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"message" : "success", <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"result" : "{<br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "company_id" : 1, <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"position" : "백엔드 주니어 개발자", <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"reward" : 1000000, <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"description" : "원티드랩에서 백...", <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"skill" : "Django"<br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}" <br> }|
-| 채용 공고 삭제    | DELETE | /hiring/{postId} |                                                                                                                                                                                                                                                                                                                                    | {<br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "code" : 200, <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"message" : "success", <br>}|
-| 채용 공고 조회    | GET    | /hiring  | ?page=1&size=16                                                                                                                                                                                                                                                                                                                    | {<br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "code" : 200, <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"message" : "success", <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"result" : "{<br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "company_id" : 1, <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"position" : "백엔드 주니어 개발자", <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"reward" : 1000000, <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"description" : "원티드랩에서 백...", <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"skill" : "Django"<br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}"<br>&nbsp;&nbsp;&nbsp;&nbsp;"{<br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "company_id" : 2, <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"position" : "백엔드 주니어 개발자", <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"reward" : 1000000, <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"description" : "원티드랩에서 백...", <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"skill" : "Python"<br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}"<br>&nbsp;&nbsp;&nbsp;&nbsp;"{<br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "company_id" : 3, <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"position" : "백엔드 주니어 개발자", <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"reward" : 1000000, <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"description" : "원티드랩에서 백...", <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"skill" : "Python"<br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}"<br>&nbsp;&nbsp;&nbsp;&nbsp;"{<br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "company_id" : 4, <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"position" : "백엔드 주니어 개발자", <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"reward" : 1000000, <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"description" : "원티드랩에서 백...", <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"skill" : "Python"<br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}" <br> } |
-| 채용 공고 상세 조회 |GET| /hiring/{postId} |    |{<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "company_id" : 1, <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"position" : "백엔드 주니어 개발자", <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"reward" : 1000000, <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"description" : "원티드랩에서 백...", <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"skill" : "Python"<br> } |
-| 채용 지원       |POST| /applying| {<br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "post_id" : 1, <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"user_id" : 1<br> } |{<br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "user_id"  : 1,<br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "company_id" : 1, <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"position" : "백엔드 주니어 개발자", <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"reward" : 1000000, <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"description" : "원티드랩에서 백...", <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"skill" : "Python"<br> } |
+<summary>더보기</summary>
+<img src="https://github.com/Hanghea99clone/CherryCoding-Back/assets/100930333/ae3b245c-6e1d-4421-966e-437d7621eec0">
 </details>
 
-## 과제 수행
-채용 공고 등록 - 2023/10/01
+## 기술 스택
+* Spring Boot
+* Spring Data JPA
+* QueryDsl
+* Mysql
+## DB 설계
+<img src="https://github.com/HEUKWU/wanted-pre-onboarding-backend/assets/100930333/b75e2399-d5a0-4292-8864-74e589c6791e" width="500" height="500">

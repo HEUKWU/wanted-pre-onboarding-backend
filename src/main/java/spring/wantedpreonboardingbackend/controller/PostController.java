@@ -8,7 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import spring.wantedpreonboardingbackend.dto.PostDto;
 import spring.wantedpreonboardingbackend.dto.ResponseDto;
-import spring.wantedpreonboardingbackend.entity.SearchOption;
+import spring.wantedpreonboardingbackend.entity.Search;
 import spring.wantedpreonboardingbackend.service.PostService;
 
 import java.util.List;
@@ -48,8 +48,8 @@ public class PostController {
 
     @Operation(summary = "공고 목록 조회")
     @GetMapping("/hiring")
-    public ResponseEntity<ResponseDto<?>> getPostList(SearchOption searchOption, @RequestParam int page, @RequestParam int size) {
-        List<PostDto.GetPost> getPost = postService.getPostList(searchOption, page - 1, size);
+    public ResponseEntity<ResponseDto<?>> getPostList(Search search, @RequestParam int page, @RequestParam int size) {
+        List<PostDto.GetPost> getPost = postService.getPostList(search, page - 1, size);
 
         return ResponseDto.toResponseEntity(GET_POST_SUCCESS, getPost);
     }

@@ -9,7 +9,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import spring.wantedpreonboardingbackend.entity.Post;
-import spring.wantedpreonboardingbackend.entity.SearchOption;
+import spring.wantedpreonboardingbackend.entity.Search;
 
 import java.util.List;
 
@@ -26,14 +26,15 @@ public class CustomPostRepositoryImpl extends QuerydslRepositorySupport implemen
     }
 
     @Override
-    public Page<Post> findBySearchOption(Pageable pageable, SearchOption searchOption) {
+    public Page<Post> findBySearchOption(Pageable pageable, Search search) {
         JPAQuery<Post> query = jpaQueryFactory.selectFrom(post)
-                .where(eqCompanyName(searchOption.getCompanyName()),
-                        eqCountry(searchOption.getCountry()),
-                        eqLocation(searchOption.getLocation()),
-                        eqPosition(searchOption.getPosition()),
-                        eqSkill(searchOption.getSkill()),
-                        post.deleted.isFalse());
+                .where(post.deleted.isFalse().and(
+                        eqCompanyName(search.getSearch())
+                        .or(eqCountry(search.getSearch()))
+                        .or(eqLocation(search.getSearch()))
+                        .or(eqPosition(search.getSearch()))
+                        .or(eqSkill(search.getSearch())))
+                );
 
         List<Post> posts = this.getQuerydsl().applyPagination(pageable, query).fetch();
 

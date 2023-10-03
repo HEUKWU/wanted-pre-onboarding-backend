@@ -52,6 +52,7 @@ public class PostDto {
     @NoArgsConstructor
     public static class Res {
         private Long companyId;
+        private Long postId;
         private String position;
         private int reward;
         private String description;
@@ -60,6 +61,7 @@ public class PostDto {
         public static Res of(Post post) {
             return Res.builder()
                     .companyId(post.getCompany().getId())
+                    .postId(post.getId())
                     .position(post.getPosition())
                     .reward(post.getReward())
                     .description(post.getPosition())
