@@ -28,12 +28,8 @@ public class CustomPostRepositoryImpl extends QuerydslRepositorySupport implemen
     @Override
     public Page<Post> findBySearchOption(Pageable pageable, Search search) {
         JPAQuery<Post> query = jpaQueryFactory.selectFrom(post)
-                .where(post.deleted.isFalse().and(
-                        eqCompanyName(search.getSearch())
-                        .or(eqCountry(search.getSearch()))
-                        .or(eqLocation(search.getSearch()))
-                        .or(eqPosition(search.getSearch()))
-                        .or(eqSkill(search.getSearch())))
+                .where(post.deleted.isFalse(),
+                        eqSearch(search.getSearch())
                 );
 
         List<Post> posts = this.getQuerydsl().applyPagination(pageable, query).fetch();
@@ -41,43 +37,16 @@ public class CustomPostRepositoryImpl extends QuerydslRepositorySupport implemen
         return new PageImpl<>(posts, pageable, query.stream().count());
     }
 
-    private BooleanExpression eqCompanyName(String companyName) {
-        if (companyName == null || companyName.isEmpty()) {
+    private BooleanExpression eqSearch(String search) {
+        if (search == null || search.isEmpty()) {
             return null;
         }
 
-        return post.company.companyName.eq(companyName);
-    }
-
-    private BooleanExpression eqCountry(String country) {
-        if (country == null || country.isEmpty()) {
-            return null;
-        }
-
-        return post.company.country.eq(country);
-    }
-
-    private BooleanExpression eqLocation(String location) {
-        if (location == null || location.isEmpty()) {
-            return null;
-        }
-
-        return post.company.location.eq(location);
-    }
-
-    private BooleanExpression eqPosition(String position) {
-        if (position == null || position.isEmpty()) {
-            return null;
-        }
-
-        return post.position.eq(position);
-    }
-
-    private BooleanExpression eqSkill(String skill) {
-        if (skill == null || skill.isEmpty()) {
-            return null;
-        }
-
-        return post.skill.eq(skill);
+        return post.company.companyName.containsIgnoreCase(search)
+                .or(post.company.companyName.containsIgnoreCase(search))
+                .or(post.company.country.containsIgnoreCase(search))
+                .or(post.company.location.containsIgnoreCase(search))
+                .or(post.position.containsIgnoreCase(search))
+                .or(post.skill.containsIgnoreCase(search));
     }
 }
