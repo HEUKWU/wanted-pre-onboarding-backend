@@ -9,6 +9,8 @@ import spring.wantedpreonboardingbackend.entity.Apply;
 public class ApplyDto {
 
     @Getter
+    @Builder
+    @AllArgsConstructor
     @NoArgsConstructor
     public static class Req {
         private Long userId;

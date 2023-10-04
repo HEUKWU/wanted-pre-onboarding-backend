@@ -28,6 +28,7 @@ dependencies {
     implementation 'org.springdoc:springdoc-openapi-ui:1.6.15'
     implementation "com.querydsl:querydsl-jpa:5.0.0"
     annotationProcessor "com.querydsl:querydsl-apt:5.0.0"
+    testImplementation 'org.mockito:mockito-core:5.2.0'
 }
 
 def querydslDir = "$buildDir/generated/querydsl"

@@ -1,13 +1,12 @@
 package spring.wantedpreonboardingbackend.entity;
 
-import javax.persistence.*;
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-
-import lombok.*;
-import org.hibernate.annotations.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import spring.wantedpreonboardingbackend.dto.PostDto;
 
+import javax.persistence.*;
 import java.util.List;
 
 @Entity
@@ -15,7 +14,6 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@SQLDelete(sql = "UPDATE post SET deleted = true WHERE id = ?")
 public class Post {
 
     @Id
@@ -55,5 +53,9 @@ public class Post {
         this.skill = dto.getSkill();
 
         return this;
+    }
+
+    public void delete() {
+        this.deleted = true;
     }
 }

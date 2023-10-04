@@ -42,7 +42,7 @@ public class PostService {
 
     public void deletePost(Long postId) {
         Post post = postRepository.findByIdAndDeletedIsFalse(postId).orElseThrow(NotFoundPostException::new);
-        postRepository.delete(post);
+        post.delete();
     }
 
     public List<PostDto.GetPost> getPostList(Search search, int page, int size) {

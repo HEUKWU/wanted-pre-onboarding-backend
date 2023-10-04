@@ -1,9 +1,16 @@
 package spring.wantedpreonboardingbackend.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
+@NoArgsConstructor
+@Builder
+@AllArgsConstructor
 public class Company {
 
     @Id

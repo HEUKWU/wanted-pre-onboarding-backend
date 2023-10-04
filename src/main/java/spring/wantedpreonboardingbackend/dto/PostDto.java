@@ -14,36 +14,25 @@ public class PostDto {
 
     @Getter
     @NoArgsConstructor
+    @Builder
+    @AllArgsConstructor
     public static class Req {
         private Long companyId;
         private String position;
         private int reward;
         private String description;
         private String skill;
-
-        public Req(Long companyId, String position, int reward, String description, String skill) {
-            this.companyId = companyId;
-            this.position = position;
-            this.reward = reward;
-            this.description = description;
-            this.skill = skill;
-        }
     }
 
     @Getter
     @NoArgsConstructor
+    @Builder
+    @AllArgsConstructor
     public static class Update {
         private String position;
         private int reward;
         private String description;
         private String skill;
-
-        public Update(String position, int reward, String description, String skill) {
-            this.position = position;
-            this.reward = reward;
-            this.description = description;
-            this.skill = skill;
-        }
     }
 
     @Getter
@@ -60,7 +49,6 @@ public class PostDto {
 
         public static Res of(Post post) {
             return Res.builder()
-                    .companyId(post.getCompany().getId())
                     .postId(post.getId())
                     .position(post.getPosition())
                     .reward(post.getReward())
