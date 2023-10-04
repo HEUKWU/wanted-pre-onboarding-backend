@@ -1,6 +1,7 @@
 package spring.wantedpreonboardingbackend.entity;
 
 import javax.persistence.*;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 
 import lombok.*;
@@ -24,7 +25,7 @@ public class Post {
     @ManyToOne
     private Company company;
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Apply> applyList;
 
     private String position;
